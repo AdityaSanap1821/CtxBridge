@@ -10,6 +10,10 @@ ROLES = ["Sales", "Marketing", "Design", "Engineering", "Product"]
 
 LLM_PROVIDER = os.getenv("LLM_PROVIDER", "mistral")
 LLM_MODEL = os.getenv("LLM_MODEL", "mistral-small-latest")
+# Smaller model used for the pre-explain "is this substantive?" gate. Keeps
+# the main pipeline cheap by rejecting trivial highlights (single words,
+# greetings, URLs) before the expensive call. See ctxbridge/routes.py.
+LLM_GATE_MODEL = os.getenv("LLM_GATE_MODEL", "ministral-3b-latest")
 MISTRAL_API_KEY = os.getenv("MISTRAL_API_KEY", "")
 
 CORS_ORIGINS = [

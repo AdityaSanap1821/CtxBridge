@@ -9,8 +9,11 @@ class MistralProvider:
         self.client = Mistral(api_key=api_key, timeout_ms=REQUEST_TIMEOUT_MS)
         self.model = model
 
-    def complete(self, messages: list[dict], json_mode: bool = False) -> str:
-        kwargs: dict = {"model": self.model, "messages": messages}
+    def complete(self, messages: list[dict], json_mode: bool = False, model: str | None = None) -> str:
+        """Complete a chat. `model` overrides the provider's default for this
+        single call - used by the model-chaining pipeline to hit a smaller
+        model for a cheap pre-filter step."""
+        kwargs: dict = {"model": model or self.model, "messages": messages}
         if json_mode:
             kwargs["response_format"] = {"type": "json_object"}
         resp = self.client.chat.complete(**kwargs)

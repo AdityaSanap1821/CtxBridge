@@ -15,9 +15,14 @@ SYSTEM_PROMPT = _PROMPT_PATH.read_text(encoding="utf-8")
 def _first_user_turn(brief_text: str, req: ExplainRequest) -> str:
     brief = brief_text.strip() or "(no brief configured)"
     context = req.surrounding_context.strip() or "(no surrounding context)"
+    author_role = (req.author_role or "").strip()
+    author_line = (
+        f"<message_author_role>{author_role}</message_author_role>\n\n" if author_role else ""
+    )
     return (
         f"<team_brief>\n{brief}\n</team_brief>\n\n"
         f"<reader_role>{req.reader_role}</reader_role>\n\n"
+        f"{author_line}"
         f"<surrounding_context>\n{context}\n</surrounding_context>\n\n"
         f"<highlighted_text>\n{req.highlighted_text.strip()}\n</highlighted_text>"
     )
