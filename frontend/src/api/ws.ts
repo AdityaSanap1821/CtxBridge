@@ -29,7 +29,7 @@ export interface ChatSocketHandlers {
 const BACKOFF_MS = [1000, 2000, 4000, 8000, 8000]
 
 // Thin WebSocket client: connects, auto-reconnects with backoff, and sends
-// message frames. History is owned by the caller via REST — this only carries
+// message frames. History is owned by the caller via REST - this only carries
 // the live channel.
 export class ChatSocket {
   private ws: WebSocket | null = null
@@ -93,7 +93,7 @@ export class ChatSocket {
 
   private scheduleReconnect(): void {
     if (this.attempt >= BACKOFF_MS.length) {
-      // Exhausted automatic retries — wait for an explicit retry() call.
+      // Exhausted automatic retries - wait for an explicit retry() call.
       this.handlers.onState('closed', this.attempt)
       return
     }

@@ -2,11 +2,11 @@
 
 If the Mistral API is unreachable mid-demo, routes.py falls back to this table
 so the scripted highlight-to-role path in MVP.md §5 still renders something
-grounded and role-appropriate. Only kicks in on real provider errors — a
+grounded and role-appropriate. Only kicks in on real provider errors - a
 successful Mistral response always wins.
 
 Keys are matched by (normalised highlighted_text, reader_role). Normalisation:
-lowercased + stripped. Owner: Sharayu — extend with new (text, role) pairs as
+lowercased + stripped. Owner: Sharayu - extend with new (text, role) pairs as
 the seeded conversation and highlight→role matrix (TASKS §10.2) evolve.
 
 Content was captured from a passing eval-baseline run to guarantee shape and
@@ -19,14 +19,14 @@ KNOWN_GOOD: dict[tuple[str, str], dict] = {
     ("canary release", "Sales"): {
         "plain_explanation": (
             "A canary release is like rolling out a new pricing model to a small slice of "
-            "customers first — like testing a new commission structure with 5% of your pipeline "
+            "customers first - like testing a new commission structure with 5% of your pipeline "
             "before committing the whole team. It lets you catch issues before the full rollout "
             "hits your enterprise renewals."
         ),
         "impact_bullets": [
-            "May affect the Sept 15 enterprise renewals if the canary uncovers pricing edge cases — worth confirming with the two prospects now.",
-            "Could delay Marketing's ARR-uplift claim if the canary reveals billing DB sharding issues — worth syncing with Engineering on rollback plans.",
-            "Might require Sales to adjust pipeline forecasts if the canary's early data suggests lower-than-expected adoption — worth prepping a fallback narrative.",
+            "May affect the Sept 15 enterprise renewals if the canary uncovers pricing edge cases - worth confirming with the two prospects now.",
+            "Could delay Marketing's ARR-uplift claim if the canary reveals billing DB sharding issues - worth syncing with Engineering on rollback plans.",
+            "Might require Sales to adjust pipeline forecasts if the canary's early data suggests lower-than-expected adoption - worth prepping a fallback narrative.",
         ],
     },
     # Demo script step 4 (SC3 "same text, different role"): Design view of the same phrase.
@@ -47,7 +47,7 @@ KNOWN_GOOD: dict[tuple[str, str], dict] = {
         "plain_explanation": (
             "A canary release is like rolling out a new pricing page to 5% of enterprise "
             "visitors first, watching for billing errors or churn signals before exposing it to "
-            "everyone — just like A/B testing a hero section but for backend systems and revenue "
+            "everyone - just like A/B testing a hero section but for backend systems and revenue "
             "impact."
         ),
         "impact_bullets": [
@@ -60,7 +60,7 @@ KNOWN_GOOD: dict[tuple[str, str], dict] = {
     ("pipeline velocity", "Engineering"): {
         "plain_explanation": (
             "In Sales, 'pipeline velocity' is the speed at which qualified deals move through the "
-            "funnel — measured in dollars per week or deals per sprint — like a kanban board "
+            "funnel - measured in dollars per week or deals per sprint - like a kanban board "
             "where WIP limits throttle throughput."
         ),
         "impact_bullets": [

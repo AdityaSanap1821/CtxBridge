@@ -17,7 +17,7 @@ export function encodeSharedExplanation(payload: SharedExplanation): string {
 }
 
 // Returns the parsed payload if `text` is a well-formed shared explanation,
-// or null otherwise. Null means "render as a plain message" — never throws,
+// or null otherwise. Null means "render as a plain message" - never throws,
 // so a malformed payload can never crash the list (design spec §7).
 export function decodeSharedExplanation(text: string): SharedExplanation | null {
   if (!text.startsWith(SENTINEL)) return null
@@ -38,7 +38,7 @@ export function decodeSharedExplanation(text: string): SharedExplanation | null 
       }
     }
   } catch {
-    // fall through to null — treat as plain text
+    // fall through to null - treat as plain text
   }
   return null
 }

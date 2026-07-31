@@ -10,7 +10,7 @@ export function AskButton({ rect, onClick }: { rect: DOMRect; onClick: () => voi
       className="ask-btn"
       style={{ top: Math.max(8, top), left }}
       // Prevent the mousedown from collapsing the browser selection before
-      // the click fires — HighlightLayer needs it to still be intact.
+      // the click fires - HighlightLayer needs it to still be intact.
       onMouseDown={(e) => e.preventDefault()}
       onClick={onClick}
     >

@@ -42,7 +42,7 @@ from app.workspace.store import get_brief  # noqa: E402
 SCENARIOS: list[tuple[str, str]] = [
     (
         "usage-based pricing",
-        "Kicking off the Q3 pricing revamp — goal is to ship usage-based pricing before the September enterprise renewals (target Sept 15).",
+        "Kicking off the Q3 pricing revamp - goal is to ship usage-based pricing before the September enterprise renewals (target Sept 15).",
     ),
     (
         "canary release",
@@ -58,19 +58,19 @@ SCENARIOS: list[tuple[str, str]] = [
     ),
     (
         "hard go-live date",
-        "Two enterprise prospects are asking for a hard go-live date — can I commit to Sept 15 on the contract?",
+        "Two enterprise prospects are asking for a hard go-live date - can I commit to Sept 15 on the contract?",
     ),
     (
         "pipeline velocity",
-        "We want to lead the launch with 'pipeline velocity' and lock in the ARR uplift claim — the narrative targets a double-digit net revenue retention bump.",
+        "We want to lead the launch with 'pipeline velocity' and lock in the ARR uplift claim - the narrative targets a double-digit net revenue retention bump.",
     ),
     (
         "soft-cap warning",
-        "I'm reworking the usage dashboard — I need final states for metered overages and the soft-cap warning before I can hand off the Figma.",
+        "I'm reworking the usage dashboard - I need final states for metered overages and the soft-cap warning before I can hand off the Figma.",
     ),
     (
         "kill switch",
-        "We'll put the new metering behind a kill switch — if the sharded DB shows replication lag, we fail back to the legacy billing path.",
+        "We'll put the new metering behind a kill switch - if the sharded DB shows replication lag, we fail back to the legacy billing path.",
     ),
     (
         "backward compatible with their existing committed-use contract",
@@ -100,7 +100,7 @@ def _run_one(highlight: str, context: str, role: str) -> tuple[dict | None, floa
 
 def _print_report() -> None:
     brief = get_brief()
-    print(f"# CtxBridge eval — {time.strftime('%Y-%m-%d %H:%M:%S')}")
+    print(f"# CtxBridge eval - {time.strftime('%Y-%m-%d %H:%M:%S')}")
     print()
     print(f"- Model: `{LLM_MODEL}`")
     print(f"- Roles: {', '.join(ROLES)}")
@@ -134,7 +134,7 @@ def _print_report() -> None:
             print("**impact_bullets:**")
             bullets = result.get("impact_bullets") or []
             if not bullets:
-                print("- _(none — fallback path likely)_")
+                print("- _(none - fallback path likely)_")
             for b in bullets:
                 print(f"- {b}")
             print()

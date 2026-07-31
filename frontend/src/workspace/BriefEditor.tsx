@@ -102,7 +102,7 @@ export function BriefEditor() {
             value={draft}
             onChange={(e) => setDraft(e.target.value)}
           />
-          {error && <div className="brief-error">Couldn't save — retry.</div>}
+          {error && <div className="brief-error">Couldn't save - retry.</div>}
           <div className="row">
             <span>{savedAt ? `saved ${relativeTime(savedAt)}` : ''}</span>
             <div className="actions">

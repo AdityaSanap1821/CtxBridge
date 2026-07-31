@@ -1,4 +1,4 @@
-// The fixed role list. Must match backend config.py ROLES exactly — this is
+// The fixed role list. Must match backend config.py ROLES exactly - this is
 // the `reader_role` / `author_role` vocabulary shared across all tracks.
 export const ROLES = [
   'Engineering',
@@ -19,7 +19,7 @@ export const ROLE_SHORT: Record<Role, string> = {
   Product: 'PRODUCT',
 }
 
-// CSS class suffix per role — drives pill + avatar tints (see index.css).
+// CSS class suffix per role - drives pill + avatar tints (see index.css).
 export const ROLE_KEY: Record<Role, string> = {
   Engineering: 'eng',
   Sales: 'sales',

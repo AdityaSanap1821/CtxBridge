@@ -33,7 +33,7 @@ export function saveIdentity(identity: Identity): void {
   try {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(identity))
   } catch {
-    // storage unavailable — identity stays in memory only
+    // storage unavailable - identity stays in memory only
   }
 }
 

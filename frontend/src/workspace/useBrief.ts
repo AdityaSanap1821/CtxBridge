@@ -10,7 +10,7 @@ interface UseBrief {
 }
 
 // Owns the workspace brief. Loads on mount and on window focus (a cheap
-// freshness pass, since brief edits aren't broadcast over WS — design spec §3.7).
+// freshness pass, since brief edits aren't broadcast over WS - design spec §3.7).
 export function useBrief(): UseBrief {
   const [brief, setBrief] = useState('')
   const [loading, setLoading] = useState(true)

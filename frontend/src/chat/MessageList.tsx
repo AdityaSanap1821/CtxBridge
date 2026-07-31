@@ -28,7 +28,7 @@ export function MessageList({ messages }: { messages: ChatMessage[] }) {
     if (grew && pinned) scrollToBottom()
   }, [messages.length, pinned])
 
-  // Pin to bottom once history has first rendered. Imperative only — the
+  // Pin to bottom once history has first rendered. Imperative only - the
   // unseen chip stays hidden until the user scrolls up (pinned starts true).
   useEffect(() => {
     scrollToBottom()
