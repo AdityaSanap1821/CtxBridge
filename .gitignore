@@ -5,7 +5,7 @@ backend/.venv/
 # Node
 frontend/node_modules/
 frontend/dist/
-# Env & data — never commit
+# Env & data - never commit
 .env
 *.env
 !.env.example
@@ -18,3 +18,6 @@ backend/*.sqlite3
 
 docs/superpowers/
 .claude/
+
+# Pitch prep - internal only, not for the repo
+pitch/
