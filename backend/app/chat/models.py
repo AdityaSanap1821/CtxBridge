@@ -31,8 +31,14 @@ def insert_message(conn, author_name: str, author_role: str, text: str) -> dict:
     }
 
 
-def get_messages(conn, limit: int = 200) -> list[dict]:
-    rows = conn.execute(
-        "SELECT * FROM messages ORDER BY id ASC LIMIT ?", (limit,)
-    ).fetchall()
+def get_messages(conn, limit: int = 200, since_id: int | None = None) -> list[dict]:
+    if since_id is not None:
+        rows = conn.execute(
+            "SELECT * FROM messages WHERE id > ? ORDER BY id ASC LIMIT ?",
+            (since_id, limit),
+        ).fetchall()
+    else:
+        rows = conn.execute(
+            "SELECT * FROM messages ORDER BY id ASC LIMIT ?", (limit,)
+        ).fetchall()
     return [row_to_message(r) for r in rows]
