@@ -34,24 +34,51 @@ from app.ctxbridge.routes import explain  # noqa: E402
 from app.ctxbridge.schema import ExplainRequest  # noqa: E402
 from app.workspace.store import get_brief  # noqa: E402
 
-# Each scenario = (highlight, the full message it came from). Keep short so
-# a full run stays cheap and manual review stays scannable.
+# Each scenario = (highlight, the full message it came from). Selection is a
+# mix drawn from seed.py: some tech-jargon (engineer -> everyone-else direction),
+# some sales/marketing terms (non-tech -> engineer direction), and a couple of
+# ambiguous cross-role phrases. Keep total under ~10 so a full run stays under
+# 3 minutes and manual review stays scannable.
 SCENARIOS: list[tuple[str, str]] = [
     (
         "usage-based pricing",
-        "Kicking off the Q3 pricing revamp — goal is to ship usage-based pricing before the September enterprise renewals.",
+        "Kicking off the Q3 pricing revamp — goal is to ship usage-based pricing before the September enterprise renewals (target Sept 15).",
     ),
     (
         "canary release",
-        "We're adding a feature flag rollout for the new pricing engine, gated behind a canary release.",
+        "We're adding a feature flag rollout for the new pricing engine, gated behind a canary release so we can watch p99 latency before we ramp to full traffic.",
     ),
     (
-        "pipeline velocity",
-        "We want to lead the launch with 'pipeline velocity' and lock in the ARR uplift claim.",
+        "p99 latency",
+        "We're adding a feature flag rollout for the new pricing engine, gated behind a canary release so we can watch p99 latency before we ramp to full traffic.",
+    ),
+    (
+        "event-sourced pipeline with idempotency keys",
+        "Heads up: the billing DB is being sharded in the same window, and metering is moving to an event-sourced pipeline with idempotency keys on every usage event.",
     ),
     (
         "hard go-live date",
-        "Two enterprise prospects are asking for a hard go-live date — can I commit to Sept 15?",
+        "Two enterprise prospects are asking for a hard go-live date — can I commit to Sept 15 on the contract?",
+    ),
+    (
+        "pipeline velocity",
+        "We want to lead the launch with 'pipeline velocity' and lock in the ARR uplift claim — the narrative targets a double-digit net revenue retention bump.",
+    ),
+    (
+        "soft-cap warning",
+        "I'm reworking the usage dashboard — I need final states for metered overages and the soft-cap warning before I can hand off the Figma.",
+    ),
+    (
+        "kill switch",
+        "We'll put the new metering behind a kill switch — if the sharded DB shows replication lag, we fail back to the legacy billing path.",
+    ),
+    (
+        "backward compatible with their existing committed-use contract",
+        "Prospect legal is asking whether the pricing change is backward compatible with their existing committed-use contract.",
+    ),
+    (
+        "SLO checks",
+        "Reminder: nothing ships to GA until the canary clears its SLO checks and the on-call runbook is signed off.",
     ),
 ]
 
