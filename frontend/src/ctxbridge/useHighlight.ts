@@ -4,10 +4,11 @@ export interface HighlightSelection {
   text: string
   rect: DOMRect
   containingMessageText: string
+  containingMessageRole: string
 }
 
 // Captures the current text selection when it falls inside a message bubble
-// (marked by data-message-text — the DOM contract with Track C, DESIGN §3.4).
+// (marked by data-message-text - the DOM contract with Track C, DESIGN §3.4).
 // Selection spanning multiple messages uses the message where it started and
 // ignores the rest (DESIGN §9). `selection` is null for empty/whitespace
 // selection or selection outside any message body. `clear` lets a consumer
@@ -44,7 +45,12 @@ export function useHighlight(): { selection: HighlightSelection | null; clear: (
         return
       }
 
-      setSelection({ text, rect, containingMessageText: container.dataset.messageText ?? '' })
+      setSelection({
+        text,
+        rect,
+        containingMessageText: container.dataset.messageText ?? '',
+        containingMessageRole: container.dataset.messageRole ?? '',
+      })
     }
 
     // mouseup/keyup (not selectionchange) so the button appears once a drag

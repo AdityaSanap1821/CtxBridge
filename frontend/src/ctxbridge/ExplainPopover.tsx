@@ -1,8 +1,13 @@
 import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 
+import { ROLES, ROLE_SHORT, roleKey } from '../chat/roles'
+import type { Role } from '../chat/roles'
+import type { ExplainSource } from '../api/rest'
+
 export interface ExplainResult {
   plain: string
   impact: string[]
+  sources: ExplainSource[]
   disclaimer: string
 }
 
@@ -10,6 +15,7 @@ export interface FollowUp {
   question: string
   answer: string
   impact: string[]
+  sources: ExplainSource[]
   status: 'loading' | 'success' | 'error'
 }
 
@@ -21,26 +27,48 @@ const GAP = 8
 // bottom, and clamps horizontally so it never runs off-screen (DESIGN §6.2,
 // spec §3.6). Renders loading / error+retry / success, plus follow-up Q&A
 // once an initial success is on screen.
+// Verified provenance footnotes for one bullet: "→ from brief: 'quote'".
+// The server has already dropped any citations whose quote wasn't a verbatim
+// substring of its claimed source, so anything reaching here is real.
+function BulletSources({ sources, bulletIndex }: { sources: ExplainSource[]; bulletIndex: number }) {
+  const mine = sources.filter((s) => s.bullet_index === bulletIndex)
+  if (mine.length === 0) return null
+  return (
+    <div className="bullet-sources">
+      {mine.map((s, i) => (
+        <div className="bullet-source" key={i}>
+          <span className="bullet-source-type">from {s.type}:</span>
+          <span className="bullet-source-quote">"{s.quote}"</span>
+        </div>
+      ))}
+    </div>
+  )
+}
+
 export function ExplainPopover({
   rect,
   highlighted,
   status,
   result,
   followUps,
+  viewingRole,
   onClose,
   onRetry,
   onShare,
   onSubmitFollowUp,
+  onChangeRole,
 }: {
   rect: DOMRect
   highlighted: string
   status: 'loading' | 'success' | 'error'
   result: ExplainResult | null
   followUps: FollowUp[]
+  viewingRole: Role
   onClose: () => void
   onRetry: () => void
   onShare: () => void
   onSubmitFollowUp: (question: string) => void
+  onChangeRole: (role: Role) => void
 }) {
   const ref = useRef<HTMLDivElement>(null)
   const scrollRef = useRef<HTMLDivElement>(null)
@@ -71,13 +99,13 @@ export function ExplainPopover({
       lines.push('', `Q: ${f.question}`, `A: ${f.answer}`)
       for (const b of f.impact) lines.push(`- ${b}`)
     }
-    lines.push('', `— ${result.disclaimer}`)
+    lines.push('', `- ${result.disclaimer}`)
     try {
       await navigator.clipboard.writeText(lines.join('\n'))
       setCopied(true)
     } catch {
       // Clipboard access can be blocked (no HTTPS, no user gesture, permissions).
-      // Fail quietly — the button just doesn't flash "Copied!".
+      // Fail quietly - the button just doesn't flash "Copied!".
     }
   }
 
@@ -127,7 +155,7 @@ export function ExplainPopover({
     >
       <div className="share-head">
         <span className="brand">
-          <span className="sq" aria-hidden="true" /> CtxBridge
+          <span className="sq" aria-hidden="true" /> Refract
         </span>
         <button type="button" className="popover-close" onClick={onClose} aria-label="Close">
           ×
@@ -136,11 +164,29 @@ export function ExplainPopover({
 
       <span className="quoted">{highlighted}</span>
 
+      <div className="role-toggle" role="radiogroup" aria-label="Explain as role">
+        <span className="role-toggle-label">View as</span>
+        {ROLES.map((r) => (
+          <button
+            key={r}
+            type="button"
+            role="radio"
+            aria-checked={r === viewingRole}
+            className={`role-toggle-pill role-${roleKey(r)}${r === viewingRole ? ' on' : ''}`}
+            onClick={() => onChangeRole(r)}
+            disabled={status === 'loading'}
+            title={r}
+          >
+            {ROLE_SHORT[r]}
+          </button>
+        ))}
+      </div>
+
       {status === 'loading' && <div className="popover-loading">Thinking…</div>}
 
       {status === 'error' && (
         <div className="popover-error">
-          <p>Couldn't reach CtxBridge. The explanation may be temporarily unavailable.</p>
+          <p>Couldn't reach Refract. The explanation may be temporarily unavailable.</p>
           <button type="button" className="retry" onClick={onRetry}>
             RETRY
           </button>
@@ -157,9 +203,12 @@ export function ExplainPopover({
           {result.impact.length > 0 && (
             <>
               <div className="share-label">Impact</div>
-              <ul>
+              <ul className="impact-list">
                 {result.impact.map((bullet, i) => (
-                  <li key={i}>{bullet}</li>
+                  <li key={i}>
+                    {bullet}
+                    <BulletSources sources={result.sources} bulletIndex={i} />
+                  </li>
                 ))}
               </ul>
             </>
@@ -181,12 +230,15 @@ export function ExplainPopover({
               )}
               {f.status === 'success' && (
                 <div className="follow-up-a">
-                  <span className="follow-up-tag">CtxBridge</span>
+                  <span className="follow-up-tag">Refract</span>
                   <p className="follow-up-a-plain">{f.answer}</p>
                   {f.impact.length > 0 && (
-                    <ul>
+                    <ul className="impact-list">
                       {f.impact.map((bullet, j) => (
-                        <li key={j}>{bullet}</li>
+                        <li key={j}>
+                          {bullet}
+                          <BulletSources sources={f.sources} bulletIndex={j} />
+                        </li>
                       ))}
                     </ul>
                   )}
@@ -208,7 +260,7 @@ export function ExplainPopover({
             onKeyDown={(e) => {
               if (e.key === 'Enter') submit()
               // Prevent Esc from bubbling to the popover close handler while
-              // the user is mid-typing — they can still click the × button.
+              // the user is mid-typing - they can still click the × button.
               if (e.key === 'Escape') e.stopPropagation()
             }}
             disabled={pending}

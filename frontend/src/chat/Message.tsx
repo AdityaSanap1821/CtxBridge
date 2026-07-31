@@ -9,7 +9,7 @@ function formatTime(iso: string): string {
 }
 
 // A single chat row. Renders either a plain bubble or, when the text carries
-// the shared-explanation sentinel, the branded CtxBridge card (design spec §3.8).
+// the shared-explanation sentinel, the branded Refract card (design spec §3.8).
 export function Message({ message }: { message: ChatMessage }) {
   const shared = decodeSharedExplanation(message.text)
   const time = formatTime(message.created_at)
@@ -29,9 +29,9 @@ export function Message({ message }: { message: ChatMessage }) {
           <div className="share-card">
             <div className="share-head">
               <span className="brand">
-                <span className="sq" aria-hidden="true" /> CtxBridge
+                <span className="sq" aria-hidden="true" /> Refract
               </span>
-              <span className="disclaimer">AI-inferred — verify</span>
+              <span className="disclaimer">AI-inferred - verify</span>
             </div>
             <span className="quoted">{shared.highlighted}</span>
             <div className="share-label">Plain</div>
@@ -50,8 +50,14 @@ export function Message({ message }: { message: ChatMessage }) {
         ) : (
           // data-message-text is the contract with the highlight widget (§3.4):
           // its value is the exact plain text, and it is the closest ancestor
-          // of every text node in the message.
-          <div className="body" data-message-text={message.text}>
+          // of every text node in the message. data-message-role tags the
+          // author's discipline so /explain can calibrate the reframing
+          // direction (Eng→Sales differs from Marketing→Sales).
+          <div
+            className="body"
+            data-message-text={message.text}
+            data-message-role={message.author_role}
+          >
             {message.text}
           </div>
         )}
