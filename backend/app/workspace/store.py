@@ -1,6 +1,6 @@
 from ..db import db_conn
 
-DEFAULT_WORKSPACE_NAME = "CtxBridge Demo Team"
+DEFAULT_WORKSPACE_NAME = "Refract Demo Team"
 
 
 def get_brief() -> str:

@@ -25,10 +25,10 @@ export function JoinScreen({ onJoin }: JoinScreenProps) {
     <div className="join">
       <div className="join-card">
         <div className="wordmark">
-          <span className="sq" aria-hidden="true" /> CtxBridge
+          <span className="sq" aria-hidden="true" /> Refract
         </div>
         <h3>Join the workspace</h3>
-        <p className="lede">Pick a name and a role — same as your seat at the table.</p>
+        <p className="lede">Pick a name and a role - same as your seat at the table.</p>
 
         <label className="field" htmlFor="join-name">
           Display name
