@@ -1,0 +1,17 @@
+# Python
+backend/**/__pycache__/
+backend/.venv/
+*.pyc
+# Node
+frontend/node_modules/
+frontend/dist/
+# Env & data — never commit
+.env
+*.env
+!.env.example
+backend/*.db
+backend/*.sqlite3
+# OS / IDE
+.DS_Store
+.vscode/
+.idea/
