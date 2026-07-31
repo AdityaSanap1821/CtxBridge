@@ -16,4 +16,5 @@ backend/*.sqlite3
 .vscode/
 .idea/
 
-docs/superpowers
+docs/superpowers/
+.claude/
