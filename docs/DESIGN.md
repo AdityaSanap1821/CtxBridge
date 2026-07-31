@@ -1,4 +1,4 @@
-# CtxBridge — Technical Design Document
+# CtxBridge - Technical Design Document
 
 **Version:** 0.1 (Hackathon MVP)
 **Date:** 2026-07-31
@@ -10,22 +10,22 @@
 
 The most important structural decision. CtxBridge is split into two logical parts:
 
-- **The Host** — a throwaway Slack-like chat app we build only to demo on. Disposable.
-- **The Brain** — the reusable IP: the `/explain` API + the highlight-to-ask widget. Stateless and self-contained, so it can later be re-hosted inside a real chat tool (Slack/Teams/Notion) without a rewrite.
+- **The Host** - a throwaway Slack-like chat app we build only to demo on. Disposable.
+- **The Brain** - the reusable IP: the `/explain` API + the highlight-to-ask widget. Stateless and self-contained, so it can later be re-hosted inside a real chat tool (Slack/Teams/Notion) without a rewrite.
 
 Everything below follows from this split. The chat app is a vehicle; the brain is the product.
 
 ```
 +---------------------------------------------------+
 |                   THE HOST                        |
-|  (disposable demo chat app — replaceable later)   |
+|  (disposable demo chat app - replaceable later)   |
 |                                                   |
 |   React chat UI  <--- WebSocket --->  FastAPI     |
 |   (join, messages, live updates)      chat module |
 |                                                   |
 |   +-------------------------------------------+   |
 |   |               THE BRAIN                   |   |
-|   |     (portable — the real product IP)      |   |
+|   |     (portable - the real product IP)      |   |
 |   |                                           |   |
 |   |  Highlight widget  --- POST /explain -->  |   |
 |   |  (useHighlight,        ctxbridge module   |   |
@@ -80,10 +80,10 @@ backend/app/
 ```
 
 **Key module responsibilities:**
-- `chat/` — owns live chat: persist message, broadcast to all sockets, serve history. Knows nothing about the LLM.
-- `ctxbridge/` — owns `/explain`. Stateless. Given inputs, builds a prompt, calls the LLM provider, returns structured output. This is the portable core.
-- `workspace/` — owns the single team brief.
-- `llm/` — isolates the provider so Mistral can be swapped without touching `ctxbridge/`.
+- `chat/` - owns live chat: persist message, broadcast to all sockets, serve history. Knows nothing about the LLM.
+- `ctxbridge/` - owns `/explain`. Stateless. Given inputs, builds a prompt, calls the LLM provider, returns structured output. This is the portable core.
+- `workspace/` - owns the single team brief.
+- `llm/` - isolates the provider so Mistral can be swapped without touching `ctxbridge/`.
 
 ### 3.2 Frontend (React + Vite)
 
@@ -131,7 +131,7 @@ CREATE TABLE messages (
 
 - **Roles** are a fixed constant list in code: `Sales | Marketing | Design | Engineering | Product`. No table.
 - **Single workspace** (id = 1) for the demo.
-- **Explanations are NOT persisted** — privacy by design. The only way an explanation enters the record is "share to thread," which writes a normal `messages` row authored by the sharing user.
+- **Explanations are NOT persisted** - privacy by design. The only way an explanation enters the record is "share to thread," which writes a normal `messages` row authored by the sharing user.
 
 ---
 
@@ -148,7 +148,7 @@ CREATE TABLE messages (
 ]
 ```
 
-**`WS /ws`** — bidirectional chat socket
+**`WS /ws`** - bidirectional chat socket
 - Client → server (send a message):
   ```json
   { "type": "message", "author_name": "Ravi", "author_role": "Engineering", "text": "..." }
@@ -158,7 +158,7 @@ CREATE TABLE messages (
   { "type": "message", "message": { "id": 13, "author_name": "...", "author_role": "...", "text": "...", "created_at": "..." } }
   ```
 
-### 5.2 CtxBridge — the brain
+### 5.2 CtxBridge - the brain
 
 **`POST /explain`**
 Request:
@@ -178,14 +178,14 @@ Response:
 {
   "plain_explanation": "The new pricing system will be released to a small group of users first, not everyone at once, so the team can catch issues early.",
   "impact_bullets": [
-    "Full rollout may take longer than a single release date — avoid quoting a hard go-live date to prospects yet.",
-    "Early-group customers may briefly see different pricing behavior — worth a heads-up before demos."
+    "Full rollout may take longer than a single release date - avoid quoting a hard go-live date to prospects yet.",
+    "Early-group customers may briefly see different pricing behavior - worth a heads-up before demos."
   ],
-  "disclaimer": "AI-inferred — confirm with the relevant team."
+  "disclaimer": "AI-inferred - confirm with the relevant team."
 }
 ```
 - `follow_up_history` is optional; when present, the endpoint continues the same Q&A.
-- The endpoint is **stateless** — the client owns the follow-up history.
+- The endpoint is **stateless** - the client owns the follow-up history.
 
 ### 5.3 Workspace brief
 
@@ -206,10 +206,10 @@ Response:
 1. User selects text inside a message bubble. `useHighlight` captures the selected string + the anchor rectangle + the containing message's full text (surrounding context).
 2. `AskButton` renders near the selection.
 3. Click → `POST /explain` with `{highlighted_text, surrounding_context, reader_role}`.
-4. `ExplainPopover` shows a loading state, then renders `plain_explanation` + `impact_bullets` (each tagged **"AI-inferred — verify"**).
+4. `ExplainPopover` shows a loading state, then renders `plain_explanation` + `impact_bullets` (each tagged **"AI-inferred - verify"**).
 5. **Follow-up:** user types a question → same endpoint with `follow_up_history` appended → answer appended in the popover.
 6. **Share to thread:** formats the explanation and sends it as a normal chat message authored by the user.
-7. Closing the popover discards everything — nothing is stored.
+7. Closing the popover discards everything - nothing is stored.
 
 ---
 
@@ -217,7 +217,7 @@ Response:
 
 The prompt is where product quality lives. Structure:
 
-- **System persona:** CtxBridge is a *shared, two-way* translation layer for a cross-functional team. It reframes whatever is highlighted into the **reader's own discipline's** mental models and metaphors — it does not merely simplify, and it is not biased toward tech→non-tech.
+- **System persona:** CtxBridge is a *shared, two-way* translation layer for a cross-functional team. It reframes whatever is highlighted into the **reader's own discipline's** mental models and metaphors - it does not merely simplify, and it is not biased toward tech→non-tech.
 - **Injected inputs (clearly delimited):**
   - Team context brief
   - Reader role
@@ -228,7 +228,7 @@ The prompt is where product quality lives. Structure:
   ```json
   { "plain_explanation": "1-2 sentences in the reader's vocabulary",
     "impact_bullets": ["2-3 second-order 'what this means for my work' nudges"],
-    "disclaimer": "AI-inferred — confirm with the relevant team." }
+    "disclaimer": "AI-inferred - confirm with the relevant team." }
   ```
 - **Rules baked into the prompt:** keep it concise; impact bullets must be framed as *inferred* nudges, not facts; use the brief to ground impact (avoid generic guesses); reframe using the reader's role, never condescend.
 
@@ -270,7 +270,7 @@ class MistralProvider:
 
 - LLM API key lives **server-side only**; never sent to the client.
 - No auth/accounts, no PII collection beyond a display name.
-- Explanations are ephemeral — not logged or stored (matches the "no one sees you asked" promise).
+- Explanations are ephemeral - not logged or stored (matches the "no one sees you asked" promise).
 - CORS restricted to configured frontend origins.
 
 ---
@@ -286,7 +286,7 @@ class MistralProvider:
 ## 12. Deployment
 
 - **Local-first:** backend on `localhost:8000`, frontend on `localhost:5173`, URLs read from env/config.
-- **Deploy-ready:** because URLs and CORS are env-driven, moving to a public host (e.g., backend on Render/Railway, frontend on Vercel/Netlify) is a late, low-risk decision — no code changes to the app logic.
+- **Deploy-ready:** because URLs and CORS are env-driven, moving to a public host (e.g., backend on Render/Railway, frontend on Vercel/Netlify) is a late, low-risk decision - no code changes to the app logic.
 - Decision on the demo delivery method (cloud vs tunnel vs LAN) is deferred until the app works locally.
 
 ---

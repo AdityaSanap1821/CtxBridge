@@ -1,27 +1,20 @@
-"""Mistral provider.
+from mistralai.client import Mistral
 
-TODO(owner: B — The Brain): implement using the mistralai SDK. Sketch:
-
-    from mistralai import Mistral
-
-    class MistralProvider:
-        def __init__(self, api_key, model):
-            self.client = Mistral(api_key=api_key)
-            self.model = model
-
-        def complete(self, messages, json_mode=False):
-            kwargs = {"model": self.model, "messages": messages}
-            if json_mode:
-                kwargs["response_format"] = {"type": "json_object"}
-            resp = self.client.chat.complete(**kwargs)
-            return resp.choices[0].message.content
-"""
+# 15s hard cap per DESIGN §9: fast failure beats a spinning popover.
+REQUEST_TIMEOUT_MS = 15_000
 
 
 class MistralProvider:
     def __init__(self, api_key: str, model: str):
-        self.api_key = api_key
+        self.client = Mistral(api_key=api_key, timeout_ms=REQUEST_TIMEOUT_MS)
         self.model = model
 
-    def complete(self, messages: list[dict], json_mode: bool = False) -> str:
-        raise NotImplementedError("MistralProvider.complete not implemented yet")
+    def complete(self, messages: list[dict], json_mode: bool = False, model: str | None = None) -> str:
+        """Complete a chat. `model` overrides the provider's default for this
+        single call - used by the model-chaining pipeline to hit a smaller
+        model for a cheap pre-filter step."""
+        kwargs: dict = {"model": model or self.model, "messages": messages}
+        if json_mode:
+            kwargs["response_format"] = {"type": "json_object"}
+        resp = self.client.chat.complete(**kwargs)
+        return resp.choices[0].message.content
