@@ -702,6 +702,107 @@
   cursor: pointer;
 }
 
+/* ---------- CtxBridge highlight widget ---------- */
+.ask-btn {
+  position: fixed;
+  transform: translateX(-50%);
+  z-index: 1000;
+  padding: 6px 14px;
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  box-shadow: var(--shadow);
+}
+.ask-btn:hover {
+  filter: brightness(1.08);
+}
+
+.explain-popover {
+  position: fixed;
+  z-index: 1000;
+  width: 340px;
+  max-width: calc(100vw - 20px);
+  border: 1px solid var(--hairline);
+  border-left: 3px solid var(--accent);
+  border-radius: 8px;
+  padding: 14px 16px;
+  background: var(--surface);
+  box-shadow: var(--shadow);
+}
+.popover-close {
+  border: none;
+  background: none;
+  color: var(--faint);
+  font-size: 18px;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0 2px;
+}
+.popover-close:hover {
+  color: var(--ink);
+}
+.disclaimer-row {
+  display: flex;
+  justify-content: flex-end;
+  margin: 8px 0 2px;
+}
+.popover-loading {
+  font-size: 13px;
+  color: var(--muted);
+  padding: 6px 0 2px;
+}
+.popover-error p {
+  font-size: 13px;
+  color: var(--ink);
+  margin: 8px 0;
+}
+.popover-error .retry {
+  padding: 5px 12px;
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+}
+.popover-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-top: 12px;
+  padding-top: 10px;
+  border-top: 1px solid var(--hairline);
+}
+.popover-footer:only-child,
+.popover-footer:has(.popover-hint:only-child) {
+  border-top: none;
+}
+.share-btn {
+  padding: 5px 12px;
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+}
+.share-btn:hover {
+  filter: brightness(1.08);
+}
+.popover-hint {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--faint);
+  margin-left: auto;
+}
+
 /* ---------- Narrow screens ---------- */
 @media (max-width: 720px) {
   .chat {

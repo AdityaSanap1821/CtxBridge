@@ -4,6 +4,7 @@ import { MessageList } from './MessageList'
 import { Sidebar } from './Sidebar'
 import { useMessages } from './useMessages'
 import type { Identity } from '../state/identity'
+import { HighlightLayer } from '../ctxbridge/HighlightLayer'
 
 // The main app layout once past the JoinScreen: sidebar + channel pane.
 // Owns the live message hook and threads its pieces to the children.
@@ -50,6 +51,8 @@ export function ChatView({ identity }: { identity: Identity }) {
 
         <Composer connection={connection} onSend={send} />
       </div>
+
+      <HighlightLayer send={send} />
     </div>
   )
 }
